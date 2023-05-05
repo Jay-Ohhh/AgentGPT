@@ -25,6 +25,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -33,6 +34,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -81,6 +84,7 @@ model AgentTask {
   id      String  @id @default(cuid())
   agentId String
   type    String
+  status  String?
   value   String  @db.Text
   info    String? @db.Text
   sort    Int

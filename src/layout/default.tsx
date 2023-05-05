@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import Head from "next/head";
 import DottedGridBackground from "../components/DottedGridBackground";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,8 +11,9 @@ interface LayoutProps {
 }
 
 const DefaultLayout = (props: LayoutProps) => {
-  const description =
-    "Assemble, configure, and deploy autonomous AI Agents in your browser.";
+  const [t] = useTranslation();
+  const description = t("HEADING_DESCRIPTION", { ns: "indexPage" });
+
   return (
     <div
       className={clsx(
@@ -36,10 +38,7 @@ const DefaultLayout = (props: LayoutProps) => {
           property="og:title"
           content="AgentGPT: Autonomous AI in your browser 🤖"
         />
-        <meta
-          property="og:description"
-          content="Assemble, configure, and deploy autonomous AI Agents in your browser."
-        />
+        <meta property="og:description" content={description} />
         <meta property="og:url" content="https://agentgpt.reworkd.ai/" />
         <meta
           property="og:image"
