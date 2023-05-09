@@ -1,24 +1,21 @@
 import React, { useEffect } from "react";
 import Button from "./Button";
 import {
+  FaCoins,
+  FaExclamationCircle,
   FaKey,
   FaMicrochip,
-  FaThermometerFull,
-  FaExclamationCircle,
   FaSyncAlt,
-  FaCoins,
-  FaTachometerAlt,
+  FaThermometerFull,
 } from "react-icons/fa";
 import Dialog from "./Dialog";
 import Input from "./Input";
-import { GPT_MODEL_NAMES, GPT_4 } from "../utils/constants";
+import { GPT_4, GPT_MODEL_NAMES } from "../utils/constants";
 import Accordion from "./Accordion";
 import type { ModelSettings, SettingModel } from "../utils/types";
 import LanguageCombobox from "./LanguageCombobox";
 import clsx from "clsx";
-import { AUTOMATIC_MODE, PAUSE_MODE } from "../types/agentTypes";
-import { useAgentStore } from "./stores";
-import { useTranslation, i18n } from "next-i18next";
+import { useTranslation } from "next-i18next";
 
 export const SettingsDialog: React.FC<{
   show: boolean;
@@ -29,18 +26,12 @@ export const SettingsDialog: React.FC<{
     ...customSettings.settings,
   });
   const [t] = useTranslation();
-  const agent = useAgentStore.use.agent();
-  const agentMode = useAgentStore.use.agentMode();
-  const updateAgentMode = useAgentStore.use.updateAgentMode();
 
   useEffect(() => {
     setSettings(customSettings.settings);
   }, [customSettings, close]);
 
-  const updateSettings = <Key extends keyof ModelSettings>(
-    key: Key,
-    value: ModelSettings[Key]
-  ) => {
+  const updateSettings = <Key extends keyof ModelSettings>(key: Key, value: ModelSettings[Key]) => {
     setSettings((prev) => {
       return { ...prev, [key]: value };
     });
@@ -78,15 +69,11 @@ export const SettingsDialog: React.FC<{
         left={
           <>
             <FaThermometerFull />
-            <span className="ml-2">
-              {`${t("TEMPERATURE", { ns: "settings" })}`}
-            </span>
+            <span className="ml-2">{`${t("TEMPERATURE", { ns: "settings" })}`}</span>
           </>
         }
         value={settings.customTemperature}
-        onChange={(e) =>
-          updateSettings("customTemperature", parseFloat(e.target.value))
-        }
+        onChange={(e) => updateSettings("customTemperature", parseFloat(e.target.value))}
         type="range"
         toolTipProperties={{
           message: `${t("HIGHER_VALUES_MAKE_OUTPUT_MORE_RANDOM", {
@@ -109,9 +96,7 @@ export const SettingsDialog: React.FC<{
         }
         value={settings.customMaxLoops}
         disabled={disabled}
-        onChange={(e) =>
-          updateSettings("customMaxLoops", parseFloat(e.target.value))
-        }
+        onChange={(e) => updateSettings("customMaxLoops", parseFloat(e.target.value))}
         type="range"
         toolTipProperties={{
           message: `${t("CONTROL_THE_MAXIMUM_NUM_OF_LOOPS", {
@@ -134,9 +119,7 @@ export const SettingsDialog: React.FC<{
         }
         value={settings.maxTokens ?? 400}
         disabled={disabled}
-        onChange={(e) =>
-          updateSettings("maxTokens", parseFloat(e.target.value))
-        }
+        onChange={(e) => updateSettings("maxTokens", parseFloat(e.target.value))}
         type="range"
         toolTipProperties={{
           message: `${t("CONTROL_MAXIMUM_OF_TOKENS_DESCRIPTION", {
@@ -174,15 +157,12 @@ export const SettingsDialog: React.FC<{
       }
     >
       <p>
-      {`${t("GET_YOUR_OWN_APIKEY", { ns: "settings" })}`}{' '}
+        {`${t("GET_YOUR_OWN_APIKEY", { ns: "settings" })}`}{" "}
         <a className="link" href="https://platform.openai.com/account/api-keys">
-        {`${t("HERE", { ns: "settings" })}`}
+          {`${t("HERE", { ns: "settings" })}`}
         </a>
-        .{' '}{`${t("ENSURE_YOU_HAVE_FREE_CREDITS", { ns: "settings" })}`}{' '}
-        <a
-          className="link"
-          href="https://platform.openai.com/account/billing/overview"
-        >
+        . {`${t("ENSURE_YOU_HAVE_FREE_CREDITS", { ns: "settings" })}`}{" "}
+        <a className="link" href="https://platform.openai.com/account/billing/overview">
           {`${t("MUST_CONNECT_CREADIT_CARD", { ns: "settings" })}`}
         </a>
         .
@@ -199,10 +179,7 @@ export const SettingsDialog: React.FC<{
           <b>
             {`${t("INFO_TO_USE_GPT4", { ns: "settings" })}`}
             &nbsp;
-            <a
-              href="https://openai.com/waitlist/gpt-4-api"
-              className="text-blue-500"
-            >
+            <a href="https://openai.com/waitlist/gpt-4-api" className="text-blue-500">
               {`${t("HERE", "HERE", { ns: "settings" })}`}
             </a>
             .&nbsp;{" "}
@@ -244,27 +221,7 @@ export const SettingsDialog: React.FC<{
           attributes={{ options: GPT_MODEL_NAMES }}
           disabled={disabled}
         />
-        <Input
-          left={
-            <>
-              <FaTachometerAlt />
-              <span className="ml-2">{`${t("LABEL_MODE", {
-                ns: "settings",
-              })}`}</span>
-            </>
-          }
-          value={agentMode}
-          disabled={agent !== null}
-          onChange={() => null}
-          setValue={updateAgentMode as (agentMode: string) => void}
-          type="combobox"
-          toolTipProperties={{
-            message: `${t('AUTOMATIC_MODE', {ns: 'settings'})} ${t('AUTOMATIC_MODE_DESCRIPTION', {ns: 'settings'})} \n\n${t('PAUSE_MODE', {ns: 'settings'})}: ${t('PAUSE_MODE_DESCRIPTION', {ns: 'settings'})}`,
-            disabled: false,
-          }}
-          attributes={{ options: [`${t('AUTOMATIC_MODE', {ns: 'settings'})}`, `${t('PAUSE_MODE', {ns: 'settings'})}`] }}
-        />
-        <Accordion child={advancedSettings} name={t("ADVANCED_SETTINGS", {ns: 'settings'})} />
+        <Accordion child={advancedSettings} name={t("ADVANCED_SETTINGS", { ns: "settings" })} />
       </div>
     </Dialog>
   );
